@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Світ через призму архітектури</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFDFD;
+            color: #1a1a1a;
+        }
+        .font-display {
+            font-family: 'Cinzel', serif;
+        }
+        
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0; /* Start hidden */
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fdfdfd; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #e5e5e5; 
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #d4d4d4; 
+        }
+
+        /* Selection color */
+        ::selection {
+            background: black;
+            color: white;
+        }
+        
+        /* Toggle Switch Styles */
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #1a1a1a;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #1a1a1a;
+        }
+
+        /* IMAGE PROTECTION STYLES */
+        .protected-image {
+            pointer-events: none;       /* Disables mouse interaction (right click won't see image) */
+            user-select: none;          /* Disables selection */
+            -webkit-user-select: none;  /* Safari */
+            -webkit-touch-callout: none;/* Disables iOS long-press menu */
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-30 bg-[#FDFDFD]/90 backdrop-blur-sm border-b border-black/5">
+        <div class="max-w-6xl mx-auto px-4 py-3 md:py-4 flex justify-between items-center">
+            <h1 id="header-title" class="text-xs md:text-sm font-display font-normal tracking-widest uppercase text-black">
+                <!-- Title via JS -->
+            </h1>
+            
+            <!-- Language Toggle Switch -->
+            <div class="flex items-center scale-90 md:scale-100 origin-right">
+                <span class="mr-2 text-[10px] md:text-xs font-bold text-gray-400">UA</span>
+                <div class="relative inline-block w-8 md:w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+                    <input type="checkbox" name="toggle" id="lang-toggle" class="toggle-checkbox absolute block w-4 h-4 md:w-5 md:h-5 rounded-full bg-white border-2 border-gray-300 appearance-none cursor-pointer transition-all duration-300 left-0 checked:left-4 md:checked:left-5" onclick="toggleLanguage()"/>
+                    <label for="lang-toggle" class="toggle-label block overflow-hidden h-4 md:h-5 rounded-full bg-gray-200 cursor-pointer"></label>
+                </div>
+                <span class="text-[10px] md:text-xs font-bold text-gray-400">EN</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-5xl mx-auto px-6 py-12 md:py-24 flex-grow w-full">
+        
+        <!-- Intro -->
+        <div id="intro-section" class="text-center mb-16 md:mb-24 animate-fade-in" style="animation-delay: 0.1s;">
+            <p id="subtitle" class="text-lg md:text-xl font-body font-light text-gray-500 max-w-xl mx-auto leading-relaxed">
+                <!-- Subtitle via JS -->
+            </p>
+        </div>
+
+        <!-- Grid Container -->
+        <div id="buildings-grid" class="grid grid-cols-1 gap-12 md:gap-24">
+            <!-- Buildings rendered here -->
+        </div>
+
+        <!-- Action Button (Input Mode) -->
+        <div id="action-container" class="flex justify-center pt-24 pb-12 transition-all duration-500">
+            <button 
+                id="submit-btn"
+                onclick="submitResults()"
+                class="group relative px-12 py-5 bg-black text-white overflow-hidden transition-all hover:bg-gray-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled
+            >
+                <div class="flex items-center space-x-4">
+                    <span id="submit-text" class="text-xs font-bold tracking-[0.2em] uppercase">
+                        <!-- Text via JS -->
+                    </span>
+                    <!-- Arrow Right Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                </div>
+            </button>
+        </div>
+
+        <!-- Summary Section (Result Mode) -->
+        <div id="summary-section" class="hidden mt-32 border-t border-black/10 pt-24 pb-12 animate-fade-in">
+            <div class="max-w-2xl mx-auto text-center space-y-12">
+               
+               <p id="witty-summary" class="text-3xl md:text-4xl font-display italic text-black leading-tight px-4">
+                 <!-- Summary text -->
+               </p>
+
+               <!-- Best/Worst Stats -->
+               <div id="stats-container" class="flex flex-col md:flex-row justify-center gap-12 pt-8">
+                  <!-- Rendered via JS -->
+               </div>
+
+               <div class="pt-16">
+                  <button 
+                    onclick="resetGame()"
+                    class="inline-flex items-center space-x-2 text-gray-400 hover:text-black transition-colors text-[10px] font-bold uppercase tracking-[0.2em]"
+                  >
+                    <!-- Refresh Icon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+                    <span id="reset-text">Спробувати ще раз</span>
+                  </button>
+               </div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // --- DATA ---
+        const buildingsData = [
+          {
+            id: 1,
+            year: 1882,
+            image: "1.jpg",
+            orientation: 'v',
+            ua: { name: "Храм спокути Святого Сімейства", style: "Модерн", location: "Барселона, Іспанія", desc: "1882-…" },
+            en: { name: "Basílica de la Sagrada Família", style: "Modernisme", location: "Barcelona, Spain", desc: "1882-…" },
+            thresholds: [5, 15, 30]
+          },
+          {
+            id: 2,
+            year: 1930,
+            image: "2.jpg",
+            orientation: 'v',
+            ua: { name: "Емпайр-Стейт-Білдінг", style: "Ар-деко", location: "Нью-Йорк, США", desc: "1930-1931" },
+            en: { name: "Empire State Building", style: "Art Deco", location: "New York, USA", desc: "1930-1931" },
+            thresholds: [4, 10, 25]
+          },
+          {
+            id: 3,
+            year: 1661,
+            image: "3.jpg",
+            orientation: 'h',
+            ua: { name: "Версальський палац", style: "Класицизм", location: "Версаль, Франція", desc: "1661-1710" },
+            en: { name: "Palace of Versailles", style: "Classicism", location: "Versailles, France", desc: "1661-1710" },
+            thresholds: [5, 15, 40]
+          },
+          {
+            id: 4,
+            year: -447,
+            image: "4.jpg",
+            orientation: 'h',
+            ua: { name: "Парфенон", style: "Класика", location: "Афіни, Греція", desc: "~ -447-438" },
+            en: { name: "Parthenon", style: "Classical", location: "Athens, Greece", desc: "~ -447-438" },
+            thresholds: [15, 50, 200]
+          },
+          {
+            id: 5,
+            year: 1506,
+            image: "5.jpg",
+            orientation: 'h', // Horizontal requested
+            ua: { name: "Базиліка святого Петра", style: "Ренесанс, Бароко", location: "Ватикан, Італія", desc: "1506-1626" },
+            en: { name: "St. Peter's Basilica", style: "Renaissance, Baroque", location: "Vatican City", desc: "1506-1626" },
+            thresholds: [5, 15, 40]
+          },
+          {
+            id: 6,
+            year: 1248,
+            image: "6.jpg",
+            orientation: 'h', // CHANGED TO HORIZONTAL AS REQUESTED
+            ua: { name: "Кельнський собор", style: "Готика", location: "Кельн, Німеччина", desc: "1248-1880" },
+            en: { name: "Cologne Cathedral", style: "Gothic", location: "Cologne, Germany", desc: "1248-1880" },
+            thresholds: [15, 50, 150]
+          },
+          {
+            id: 7,
+            year: 1999,
+            image: "7.jpg",
+            orientation: 'h',
+            ua: { name: "Концертна зала ім. Волта Діснея", style: "Деконструктивізм", location: "Лос-Анджелес, США", desc: "1999-2003" },
+            en: { name: "Walt Disney Concert Hall", style: "Deconstructivism", location: "Los Angeles, USA", desc: "1999-2003" },
+            thresholds: [3, 8, 15]
+          },
+          {
+            id: 8,
+            year: 1869,
+            image: "8.jpg",
+            orientation: 'h', // Changed to Horizontal
+            ua: { name: "Замок Нойшванштайн", style: "Історична еклектика", location: "Швангау, Німеччина", desc: "1869-1883" },
+            en: { name: "Neuschwanstein Castle", style: "Historicist", location: "Schwangau, Germany", desc: "1869-1883" },
+            thresholds: [12, 30, 80]
+          },
+          {
+            id: 9,
+            year: 1938,
+            image: "9.jpg",
+            orientation: 'h', // Changed to Horizontal
+            ua: { name: "Палац італійської цивілізації", style: "Модернізм", location: "Рим, Італія", desc: "1938-1943" },
+            en: { name: "Palazzo della Civiltà Italiana", style: "Modernism", location: "Rome, Italy", desc: "1938-1943" },
+            thresholds: [5, 15, 40]
+          },
+          {
+            id: 10,
+            year: 1956,
+            image: "10.jpg",
+            orientation: 'v',
+            ua: { name: "Сігрем-білдінг", style: "Модернізм", location: "Нью-Йорк, США", desc: "1956-1958" },
+            en: { name: "Seagram Building", style: "Modernism", location: "New York, USA", desc: "1956-1958" },
+            thresholds: [4, 10, 25]
+          }
+        ];
+
+        const translations = {
+          ua: {
+            title: "Світ через призму архітектури",
+            subtitle: "Спробуйте якомога точніше вказати <span class='font-bold text-black border-b-2 border-black/10'>РІК ПОЧАТКУ</span> будівництва",
+            inputPlaceholder: "-5000 ... 2025",
+            submit: "Синхронізуватись",
+            reset: "Спробувати ще раз",
+            yourYear: "Ваш варіант",
+            realYear: "Період зведення",
+            miss: "Похибка",
+            labels: { style: "Стиль", location: "Розташування", period: "Період зведення" },
+            verdicts: {
+              perfect: "Ідеально, ви профі",
+              good: "Дуже добре, ви щось знаєте",
+              ok: "Не найгірший результат",
+              bad: "Отакої"
+            },
+            mostAccurate: "Найточніший постріл",
+            biggestMiss: "Найбільший промах",
+            witty: [
+                { min: 100, text: "Ви або подорожуєте у часі, або особисто носили цеглу для Гауді. Де ви ховаєте машину часу?" },
+                { min: 95, text: "Майже бездоганно. Ви знаєте про ці будівлі більше, ніж їхні архітектори. Це навіть трохи лякає." },
+                { min: 90, text: "Вражаюче! Ви розрізняєте бароко і рококо у повній темряві. Вашим друзям з вами, мабуть, дуже «весело» на прогулянках." },
+                { min: 85, text: "Сильно. Ви той самий турист, який читає кожну табличку в музеї, поки решта групи шукає буфет." },
+                { min: 80, text: "Блискуче. Ви знаєте, що неоготика — це не новий молодіжний рух. У наш час це рідкість." },
+                { min: 75, text: "Дуже добре. Ви явно провели тисячі годин у 'Civilization', будуючи Чудеса Світу. Не дарма сиділи за комп'ютером." },
+                { min: 70, text: "Гідний результат. Ви впевнено орієнтуєтесь у століттях, хоча іноді плутаєте вівторок із середою." },
+                { min: 65, text: "Ви — ходяча енциклопедія. Правда, деякі сторінки вирвані, але хто зараз читає паперові книги?" },
+                { min: 60, text: "Ви пройшли по тонкому льоду ерудиції і не провалилися. Архітектурний факультет вами б пишався... стримано." },
+                { min: 55, text: "Архітектура — це застигла музика, а ваші відповіді — це фрі-джаз. Багато хаосу, але є свій шарм." },
+                { min: 50, text: "Золота середина. Якби ви проектували міст, він би стояв, але ходити по ньому я б не радив." },
+                { min: 45, text: "Ваші знання історії нагадують Пізанську вежу. Вони помітно хиляться вбік, але якимось дивом ще тримаються." },
+                { min: 40, text: "Ви десь чули ці назви. Можливо, бачили на магнітиках у сувенірній лавці. Це теж досвід." },
+                { min: 35, text: "Для вас 'Ренесанс' — це, швидше за все, назва елітного житлового комплексу. Але гарного комплексу." },
+                { min: 30, text: "Ви вважаєте, що все збудоване до появи інтернету — це 'дуже давно'. І технічно ви праві." },
+                { min: 25, text: "Ваше відчуття часу настільки унікальне, що Ейнштейн переписав би теорію відносності, поспілкувавшись з вами." },
+                { min: 20, text: "Ви промахуєтесь століттями з такою впевненістю, наче плануєте жити вічно. Заздрю вашому оптимізму." },
+                { min: 10, text: "Історичний вандалізм. Ви щойно зруйнували часово-просторовий континуум своїми відповідями. Вітаю." },
+                { min: 1, text: "Катастрофа. Якби ви були головним архітектором міста, ми б досі жили в дуже стильних, але холодних печерах." },
+                { min: 0, text: "Отакої. Здається, ви плутаєте Колізей з місцевим стадіоном. Але там теж продають хот-доги, різниця невелика." }
+            ]
+          },
+          en: {
+            title: "World Through the Lens of Architecture",
+            subtitle: "Try to specify the <span class='font-bold text-black border-b-2 border-black/10'>CONSTRUCTION START YEAR</span> for each building as accurately as possible",
+            inputPlaceholder: "-5000 ... 2025",
+            submit: "Synchronize",
+            reset: "Restart Journey",
+            yourYear: "Your Guess",
+            realYear: "Construction Period",
+            miss: "Deviation",
+            labels: { style: "Style", location: "Location", period: "Construction Period" },
+            verdicts: {
+              perfect: "Perfect, absolute mastery",
+              good: "Very good, you know something",
+              ok: "Not the worst result",
+              bad: "Oh my..."
+            },
+            mostAccurate: "Most Accurate",
+            biggestMiss: "Biggest Miss",
+            witty: [
+                { min: 100, text: "You either travel through time or personally carried bricks for Gaudi. Where do you hide the time machine?" },
+                { min: 95, text: "Almost flawless. You know more about these buildings than their architects did. It's slightly terrifying." },
+                { min: 90, text: "Impressive! You distinguish Baroque and Rococo in total darkness. Your friends must have 'so much fun' walking with you." },
+                { min: 85, text: "Strong. You are exactly that tourist who reads every plaque in the museum while the group looks for the buffet." },
+                { min: 80, text: "Brilliant. You know Neo-Gothic isn't a new youth movement. That's rare these days." },
+                { min: 75, text: "Very good. You clearly spent thousands of hours in 'Civilization' building Wonders of the World. Time well spent." },
+                { min: 70, text: "Decent result. You navigate centuries confidently, even if you sometimes confuse Tuesday with Wednesday." },
+                { min: 65, text: "You are a walking encyclopedia. Granted, some pages are missing, but who reads paper books nowadays?" },
+                { min: 60, text: "You walked on the thin ice of erudition and didn't fall through. The architecture faculty would be proud... moderately." },
+                { min: 55, text: "Architecture is frozen music, and your answers are free jazz. Lots of chaos, but it has charm." },
+                { min: 50, text: "Golden mean. If you designed a bridge, it would stand, but I wouldn't advise walking on it." },
+                { min: 45, text: "Your knowledge of history resembles the Leaning Tower of Pisa. Leaning noticeably, but miraculously holding up." },
+                { min: 40, text: "You've heard these names somewhere. Maybe on fridge magnets in a souvenir shop. That counts as experience." },
+                { min: 35, text: "To you, 'Renaissance' is likely the name of a luxury residential complex. A nice one, though." },
+                { min: 30, text: "You believe everything built before the internet is 'ancient history'. Technically, you're right." },
+                { min: 25, text: "Your sense of time is so unique that Einstein would rewrite the theory of relativity after talking to you." },
+                { min: 20, text: "You miss centuries with such confidence, as if you plan to live forever. I envy your optimism." },
+                { min: 10, text: "Historical vandalism. You just destroyed the space-time continuum with your answers. Congratulations." },
+                { min: 1, text: "Disaster. If you were the city architect, we'd still be living in very stylish but cold caves." },
+                { min: 0, text: "Oh my. You seem to confuse the Colosseum with a local stadium. Both sell hot dogs, so small difference." }
+            ]
+          }
+        };
+
+        // --- STATE ---
+        let currentLang = 'ua';
+        let userInputs = {};
+        let isResultsMode = false;
+
+        // --- LOGIC ---
+
+        function getVerdictData(diff, thresholds, t) {
+            const [t1, t2, t3] = thresholds;
+            if (diff <= t1) return { 
+                text: t.verdicts.perfect, 
+                score: 10,
+                // Card styling for Perfect
+                cardClass: "bg-emerald-50 border border-emerald-200 shadow-[0_0_15px_rgba(16,185,129,0.2)]",
+                dotClass: "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]",
+                textClass: "text-emerald-900"
+            };
+            if (diff <= t2) return { 
+                text: t.verdicts.good, 
+                score: 8,
+                // Card styling for Good
+                cardClass: "bg-amber-50 border border-amber-200 shadow-[0_0_15px_rgba(245,158,11,0.2)]",
+                dotClass: "bg-amber-500 shadow-[0_0_8px_rgba(245,158,11,0.8)]",
+                textClass: "text-amber-900"
+            };
+            if (diff <= t3) return { 
+                text: t.verdicts.ok, 
+                score: 6,
+                // Card styling for Ok
+                cardClass: "bg-orange-50 border border-orange-200 shadow-[0_0_15px_rgba(249,115,22,0.2)]",
+                dotClass: "bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.8)]",
+                textClass: "text-orange-900"
+            };
+            return { 
+                text: t.verdicts.bad, 
+                score: 0,
+                // Card styling for Bad
+                cardClass: "bg-rose-50 border border-rose-200 shadow-[0_0_15px_rgba(244,63,94,0.2)]",
+                dotClass: "bg-rose-500 shadow-[0_0_8px_rgba(244,63,94,0.8)]",
+                textClass: "text-rose-900"
+            };
+        }
+
+        function calculateResults() {
+            return buildingsData.map(b => {
+                const userYear = parseInt(userInputs[b.id] || 0);
+                const diff = Math.abs(b.year - (isNaN(userYear) ? 0 : userYear));
+                const verdict = getVerdictData(diff, b.thresholds, translations[currentLang]);
+                return { ...b, userYear: isNaN(userYear) ? 0 : userYear, diff, verdict };
+            });
+        }
+
+        function getWittySummary(score) {
+            const wittyList = translations[currentLang].witty;
+            // Find the first item where score >= min
+            const match = wittyList.find(item => score >= item.min);
+            return match ? match.text : wittyList[wittyList.length - 1].text;
+        }
+
+        // --- RENDER ---
+
+        function renderApp() {
+            const t = translations[currentLang];
+            
+            // Header & Static Text
+            document.getElementById('header-title').innerText = t.title;
+            // Language switch updated via toggle state, not text
+            // Using innerHTML now to support HTML formatting in subtitle
+            document.getElementById('subtitle').innerHTML = t.subtitle;
+            document.getElementById('submit-text').innerText = t.submit;
+            document.getElementById('reset-text').innerText = t.reset;
+
+            // Visibility
+            const intro = document.getElementById('intro-section');
+            const actionContainer = document.getElementById('action-container');
+            const summarySection = document.getElementById('summary-section');
+
+            if (isResultsMode) {
+                intro.classList.add('hidden');
+                actionContainer.classList.add('hidden');
+                summarySection.classList.remove('hidden');
+                renderResults();
+            } else {
+                intro.classList.remove('hidden');
+                actionContainer.classList.remove('hidden');
+                summarySection.classList.add('hidden');
+                renderGrid();
+                checkSubmitButton();
+            }
+        }
+
+        function renderGrid() {
+            const t = translations[currentLang];
+            const container = document.getElementById('buildings-grid');
+            container.innerHTML = '';
+
+            buildingsData.forEach((building, index) => {
+                // Determine animation delay
+                const delay = (index * 0.1) + 's';
+                const inputValue = userInputs[building.id] || '';
+
+                // Determine aspect ratio class
+                const aspectClass = building.orientation === 'v' ? 'aspect-[10/16]' : 'aspect-[16/10]';
+
+                const html = `
+                <div class="group relative animate-fade-in" style="animation-delay: ${delay};">
+                    <div class="flex flex-col md:flex-row md:items-start gap-2 md:gap-16">
+                        
+                        <!-- Image -->
+                        <div class="w-full md:w-1/2">
+                            <div class="${aspectClass} relative overflow-hidden bg-gray-100 shadow-sm">
+                                <img 
+                                    src="${building.image}" 
+                                    alt=""
+                                    class="w-full h-full object-cover grayscale-[0.1] hover:grayscale-0 hover:scale-105 transition-all duration-1000 ease-out protected-image"
+                                    draggable="false"
+                                    oncontextmenu="return false;"
+                                />
+                                <!-- Number watermark removed as requested -->
+                            </div>
+                        </div>
+
+                        <!-- Input Area -->
+                        <div class="w-full md:w-1/2 flex flex-col pt-1 md:pt-0">
+                            <div class="h-full flex flex-col justify-center space-y-8">
+                                <div class="relative">
+                                    <input 
+                                        type="number"
+                                        id="input-${building.id}"
+                                        placeholder="${t.inputPlaceholder}"
+                                        value="${inputValue}"
+                                        oninput="handleInput(${building.id}, this.value)"
+                                        class="w-full bg-transparent border-b border-gray-300 py-3 text-xl md:text-4xl font-display text-black placeholder-gray-200 focus:border-black outline-none transition-colors text-center md:text-left"
+                                    />
+                                    <!-- Changed font-serif-custom to font-display (Cinzel) for consistency -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+        }
+
+        function renderResults() {
+            const t = translations[currentLang];
+            const container = document.getElementById('buildings-grid');
+            container.innerHTML = '';
+            
+            const results = calculateResults();
+            const totalScore = results.reduce((acc, curr) => acc + curr.verdict.score, 0);
+
+            // Populate Grid with Results
+            results.forEach((r, index) => {
+                const data = r[currentLang];
+                const delay = (index * 0.1) + 's';
+                const aspectClass = r.orientation === 'v' ? 'aspect-[10/16]' : 'aspect-[16/10]';
+
+                const html = `
+                <div class="group relative animate-fade-in" style="animation-delay: ${delay};">
+                    <div class="flex flex-col md:flex-row md:items-start gap-8 md:gap-16">
+                        
+                        <!-- Image -->
+                        <div class="w-full md:w-1/2">
+                            <div class="${aspectClass} relative overflow-hidden bg-gray-100 shadow-sm">
+                                <img 
+                                    src="${r.image}" 
+                                    alt=""
+                                    class="w-full h-full object-cover grayscale-0 transition-all duration-1000 ease-out protected-image"
+                                    draggable="false"
+                                    oncontextmenu="return false;"
+                                />
+                                <!-- Number watermark removed -->
+                            </div>
+                        </div>
+
+                        <!-- Result Info -->
+                        <div class="w-full md:w-1/2 flex flex-col pt-4 md:pt-0">
+                            <div class="flex flex-col h-full space-y-8">
+                                
+                                <!-- Title -->
+                                <div>
+                                    <h2 class="text-3xl md:text-4xl font-display text-black leading-tight mb-2">
+                                        ${data.name}
+                                    </h2>
+                                    <div class="w-12 h-px bg-black mt-6"></div>
+                                </div>
+
+                                <!-- Details -->
+                                <div class="grid grid-cols-2 gap-y-6 text-sm font-body">
+                                    <div>
+                                        <span class="block text-[10px] uppercase tracking-widest text-gray-400 mb-1">${t.labels.style}</span>
+                                        <span class="text-gray-900">${data.style}</span>
+                                    </div>
+                                    <div>
+                                        <span class="block text-[10px] uppercase tracking-widest text-gray-400 mb-1">${t.labels.period}</span>
+                                        <span class="text-gray-900">${data.desc}</span>
+                                    </div>
+                                    <div class="col-span-2">
+                                        <span class="block text-[10px] uppercase tracking-widest text-gray-400 mb-1">${t.labels.location}</span>
+                                        <span class="text-gray-900">${data.location}</span>
+                                    </div>
+                                </div>
+
+                                <!-- User Stats -->
+                                <div class="mt-auto pt-8 border-t border-gray-100">
+                                    <div class="flex items-baseline justify-between mb-4">
+                                        <div>
+                                            <span class="text-[10px] uppercase tracking-widest text-gray-400">${t.yourYear}</span>
+                                            <span class="ml-3 font-display text-xl">${r.userYear}</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-[10px] uppercase tracking-widest text-gray-400">${t.miss}</span>
+                                            <span class="ml-3 font-display text-xl">${r.diff}</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- Verdict Card -->
+                                    <div class="p-4 rounded-lg transition-colors ${r.verdict.cardClass}">
+                                        <div class="flex items-center gap-3">
+                                            <!-- Glowing Dot -->
+                                            <div class="w-3 h-3 rounded-full ${r.verdict.dotClass}"></div>
+                                            <span class="text-sm md:text-base font-bold tracking-wide ${r.verdict.textClass}">
+                                                ${r.verdict.text}
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                `;
+                container.insertAdjacentHTML('beforeend', html);
+            });
+
+            // Update Summary Text
+            document.getElementById('witty-summary').innerText = `"${getWittySummary(totalScore)}"`;
+
+            // Best/Worst Logic
+            const sorted = [...results].sort((a, b) => a.diff - b.diff);
+            const best = sorted[0];
+            const worst = sorted[sorted.length - 1];
+
+            // Use font-display for building names to match page style
+            const statsContainer = document.getElementById('stats-container');
+            statsContainer.innerHTML = `
+                <div class="flex flex-col items-center gap-4">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 border-b border-gray-200 pb-1">
+                      ${t.mostAccurate}
+                    </span>
+                    <div class="w-24 h-32 overflow-hidden bg-gray-50 shadow-sm">
+                        <img src="${best.image}" class="w-full h-full object-cover grayscale protected-image" draggable="false" oncontextmenu="return false;" alt="" />
+                    </div>
+                    <p class="text-xs font-display">${best[currentLang].name}</p>
+                </div>
+
+                <div class="flex flex-col items-center gap-4">
+                    <span class="text-[10px] font-bold uppercase tracking-widest text-gray-400 border-b border-gray-200 pb-1">
+                      ${t.biggestMiss}
+                    </span>
+                    <div class="w-24 h-32 overflow-hidden bg-gray-50 shadow-sm">
+                        <img src="${worst.image}" class="w-full h-full object-cover grayscale protected-image" draggable="false" oncontextmenu="return false;" alt="" />
+                    </div>
+                    <p class="text-xs font-display">${worst[currentLang].name}</p>
+                </div>
+            `;
+        }
+
+        // --- INTERACTION HANDLERS ---
+
+        window.handleInput = function(id, value) {
+            // Range validation -5000 to 2025
+            if (value === '' || (parseInt(value) >= -5000 && parseInt(value) <= 2025)) {
+                userInputs[id] = value;
+                checkSubmitButton();
+            }
+        };
+
+        window.checkSubmitButton = function() {
+            const btn = document.getElementById('submit-btn');
+            const hasInput = Object.keys(userInputs).length > 0;
+            if (hasInput) {
+                btn.disabled = false;
+                btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        };
+
+        window.submitResults = function() {
+            isResultsMode = true;
+            renderApp();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.resetGame = function() {
+            userInputs = {};
+            isResultsMode = false;
+            // Clear inputs visually if not re-rendering immediately, but we will re-render
+            renderApp();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+
+        window.toggleLanguage = function() {
+            const toggle = document.getElementById('lang-toggle');
+            // If function called by label click, checkbox state changes automatically.
+            // But we need to sync state. 
+            // If unchecked (default) -> UA. Checked -> EN.
+            // Actually, let's just check the current state of checkbox.
+            // Wait, we need to handle if 'onclick' is on the input itself.
+            // The onclick on input happens after change.
+            const isChecked = toggle.checked;
+            currentLang = isChecked ? 'en' : 'ua';
+            renderApp();
+        };
+
+        // Initialize
+        renderApp();
+
+    </script>
+</body>
+</html>
